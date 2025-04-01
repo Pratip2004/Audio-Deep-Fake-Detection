@@ -1,5 +1,5 @@
 After carefully reviewing the *Audio-Deepfake-Detection* GitHub repository—a well-curated collection of research papers and resources on detecting audio deepfakes—I’ve identified three promising approaches that align with our needs. Each method offers unique strengths and trade-offs in distinguishing real from AI-generated speech.
-1. Handcrafted Feature-Based Detection:-
+1.  Handcrafted Feature-Based Detection :-
 🔹 How It Works: This approach relies on manually engineered features like Mel-Frequency Cepstral Coefficients (MFCCs), Linear Predictive Coding (LPC), and spectral features to capture key characteristics of an audio signal.  
 
 🔹 Performance & Benefits: Studies show that handcrafted features can effectively differentiate real and fake audio, especially in controlled environments. They are computationally efficient, making them well-suited for real-time detection. Additionally, their interpretability helps us understand what distinguishes genuine speech from deepfake audio.  
