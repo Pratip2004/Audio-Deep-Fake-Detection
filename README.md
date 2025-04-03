@@ -96,3 +96,117 @@ A sequence of feature embeddings for each time step.
   A high dimensional sequence is the output of Bidirectional LSTM RNN. So The final BiLSTM output is passed to a fully connected (FC) layer. This is a Neural Network where we use the backpropagation and optimizers to adjust the weight and bias using the loss function.
   A softmax activation predicts real (0) or fake (1).
 
+## Model Analysis
+### Challenges Faced & How They Were Solved
+#### 1. Dataset Preprocessing
+📌 Challenge: The ASVspoof 5 dataset included multiple audio formats and varying durations, making standardization tricky.
+
+✅ Solution: Used Librosa to resample all audio files to a fixed sample rate and duration, ensuring consistency across the dataset.
+
+#### 2. Extracting Meaningful MFCC Features
+📌 Challenge: Extracting the right features without losing key details that differentiate real and fake audio.
+
+✅ Solution: Chose 13 MFCC coefficients, preserving the time-series structure for better learning by LSTM layers.
+
+#### 3. Training Instability
+📌 Challenge: The model was sensitive to learning rate changes, leading to unstable training behavior.
+
+✅ Solution: Implemented learning rate scheduling and batch normalization to keep training stable.
+
+#### 4. Overfitting Issues
+📌 Challenge: The model performed well on training data but struggled on unseen validation samples.
+
+✅ Solution: Used dropout layers (0.3), L2 regularization, and data augmentation techniques like adding noise and pitch shifting to improve generalization.
+
+### Key Assumptions
+- #### 🎯 Balanced Dataset:
+  Assumed that the dataset had a roughly equal number of real and fake samples.
+
+- #### 🎯 MFCC Features Are Sufficient:
+  Assumed that MFCCs capture the key differences needed for detection.
+
+- #### 🎯 Subset Generalization:
+  Assumed that training on a smaller dataset would still be effective when applied to larger datasets.
+###  2. Model & Performance Analysis
+#### Why Choose CNN-BiLSTM?
+✅ CNN (Convolutional Neural Networks) – Helps detect local spectral patterns in the MFCC representation.
+✅ BiLSTM (Bidirectional Long Short-Term Memory) – Captures time-based dependencies, making it great for speech analysis.
+✅ MFCC Input Representation – Mimics human hearing, making it effective for speech and audio analysis.
+
+#### How It Works
+1️⃣ Extract MFCC Features – Converts raw audio into a time-frequency representation.
+2️⃣ Pass Through CNN Layers – Detects small-scale spectral changes that may indicate deepfake manipulation.
+3️⃣ Feed Into BiLSTM Layers – Captures long-term dependencies in the speech patterns.
+4️⃣ Fully Connected Layers – Convert learned features into a classification decision (Real or Fake).
+5️⃣ Softmax Activation – Outputs the probability of the audio being real or fake.
+
+#### Performance Metrics
+Metric	Value
+Training Accuracy	-> 91.5%
+
+Validation Accuracy->	58.2%
+
+Test Accuracy->	36.4%
+
+Average Inference Speed	-> 50ms/sample
+#### Strengths & Weaknesses
+##### ✅ What Worked Well?
+
+- Captures Speech Patterns Efficiently using BiLSTM.
+
+- Generalizes Well thanks to data augmentation techniques.
+
+- Fast Inference Time (~50ms/sample) makes it suitable for near real-time detection.
+
+#####  Challenges & Limitations
+
+Sensitive to Noise Variations – Performance drops in noisy environments.
+
+Overfitting Risks – Needs careful regularization.There are high overfitting happens, may be due to lack of dataset. After optimizing also the data set has overfitting, thats the test accuracy is low.
+
+Dependent on MFCC Quality – May not capture high-level deepfake artifacts effectively.
+
+### 3. Future Improvements
+ - Integrate Transfer Learning – Use models like Wav2Vec2 to improve feature extraction.
+ - Expand Training Dataset – Include more diverse deepfake samples to improve robustness.
+ - Try Spectrogram-Based CNNs – Train models directly on mel-spectrograms for deeper feature extraction.
+
+### 4. Reflection & Key Takeaways
+#### - Biggest Challenges?
+Managing dataset variability in real-world recordings.
+
+Balancing accuracy vs. real-time performance in detection.
+
+Preventing overfitting while maintaining strong generalization.
+
+####  - Real-World vs. Research Dataset Performance
+Lab datasets (e.g., ASVspoof) are clean and well-labeled.
+
+Real-world data introduces background noise, compression artifacts, and lower-quality recordings, making detection harder.
+
+#### - What Would Improve Performance?
+More Deepfake Audio Variants – Training on multiple deepfake synthesis techniques.
+
+Noise-Augmented Training Data – To improve robustness in real-world scenarios.
+
+More Computational Resources – Exploring deeper architectures like Wav2Vec2 or ResNet-based models.
+
+#### - Deploying in a Production Environment
+Optimize Model for Edge Devices – Use techniques like quantization and pruning to reduce size.
+
+Deploy as a REST API – Using FastAPI for real-time inference.
+
+Focus on Speed & Accuracy Trade-Offs – Balance lightweight models with deep learning accuracy.
+
+### Final Thoughts
+This CNN-BiLSTM model with MFCC features provides a strong starting point for AI-generated speech detection. While the model shows promising results, further improvements in dataset diversity, transfer learning, and real-world testing will be crucial for production-level robustness.
+
+By continuously refining the model and incorporating state-of-the-art deep learning techniques, we can push the boundaries of real-time deepfake audio detection and enhance security in digital communications.
+
+
+
+
+
+
+
+
